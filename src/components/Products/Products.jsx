@@ -6,7 +6,7 @@ const Products = ()=>{
   const [ products , setProducts ] = useState([]);
 
   useEffect( ()=>{
-    axios.get("http://localhost:5000/products/getProducts")
+    axios.get("https://clothes-shop-react-js.herokuapp.com/products/getProducts")
     .then( (response)=>{
       setProducts(response.data);
     })
