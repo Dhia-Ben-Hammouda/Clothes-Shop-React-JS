@@ -6,6 +6,7 @@ import { useState  } from "react";
 const Login = ()=>{
   const [email , setEmail] = useState("");
   const [password , setPassword] = useState("");
+  const [res , setRes] = useState("");
 
   async function submitHandler(e)
   {
@@ -14,17 +15,30 @@ const Login = ()=>{
     const response = await fetch("https://clothes-shop-react-js.herokuapp.com/auth/login", {
       method:"POST",
       headers:{
-        "content-type":"application-json"
+        "content-type":"application/json"
       },
-      body:{
+      body: JSON.stringify({
         email,
         password
-      }
+      })
     })
 
     const data = await response.json();
 
-    console.log(data);
+    if(data.status === "doesn't exist")
+    {
+      setRes("user doesn't exist");
+    }
+    else if(data.status === "wrong info")
+    {
+      setRes("wrong info");
+    }
+    else if(data.status === "ok")
+    {
+      localStorage.setItem("token" , data.token );
+      localStorage.setItem("email" , data.email);
+      window.location.href = "/";
+    }
   }
 
   return(
@@ -53,7 +67,7 @@ const Login = ()=>{
       </IconContext.Provider>
 
       <button>Sign in</button>
-
+      <h4 style={ {  color:"red" , marginTop:"1rem"  } }>{res}</h4>
     </form>
   );
 }

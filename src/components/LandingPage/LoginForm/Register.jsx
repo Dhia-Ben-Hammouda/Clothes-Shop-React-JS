@@ -7,6 +7,7 @@ const Register = ()=>{
   const [ email , setEmail ] = useState("");
   const [ password , setPassword ] = useState("");
   const [ phone , setPhone] = useState("");  
+  const [ res , setRes ] = useState("");
 
   async function submitHandler(e)
   {
@@ -15,18 +16,26 @@ const Register = ()=>{
     const response = await fetch("https://clothes-shop-react-js.herokuapp.com/auth/register",{
       method:"POST",
       headers:{
-        "content-type":"application-json"
+        "content-type":"application/json"
       },
-      body:{
+      body: JSON.stringify({
         email,
         phone,
         password
-      }
+      })
     })
 
     const data = await response.json();
 
-    console.log(data);
+    if(data.status === "exists")
+    {
+      setRes("user already exists");
+    }
+    else if(data.status === "ok")
+    {
+      setRes("user created succesfully");
+      document.getElementById("res").style.color = "green";
+    }
 
   }
 
@@ -38,6 +47,7 @@ const Register = ()=>{
           <input 
             placeholder="Enter phone..." 
             value={phone}
+            required
             onChange={ (e)=>{setPhone(e.target.value)} }  
           />
         </div>
@@ -48,6 +58,7 @@ const Register = ()=>{
             placeholder="Enter email..." 
             value={email}
             type="email"
+            required
             onChange={ (e)=>{setEmail(e.target.value)} }
           />
         </div>
@@ -58,11 +69,13 @@ const Register = ()=>{
             placeholder="enter password..." 
             value={password}
             type="password"
+            required
             onChange={ (e)=>{setPassword(e.target.value)} }
           />
         </div>
       </IconContext.Provider>
       <button>Sign Up</button>
+      <h4 id="res" style={ {  color:"red" , marginTop:".3rem"   } }>{res}</h4>
     </form>
   );
 }

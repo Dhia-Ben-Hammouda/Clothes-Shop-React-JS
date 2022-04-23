@@ -21,7 +21,7 @@ const LandingPage = ()=>{
               experience the luxury of buying high quality 
               clothes from home with low prices and fast shipping!
             </h3>
-            <button onClick={ clickHandler } >Sign in</button>
+            <button className="btn" onClick={ clickHandler } >Sign in</button>
           </div>
 
           <LoginForm/>
